@@ -10,9 +10,10 @@
     <h3> Logs </h3>
     <div id="logs"></div>
     <script type="text/javascript">
-      document.addEventListener('DOMContentLoaded', () => WebRTCjs.publish() );
-      // var publisher = new WebRTCjs();
-      // publisher.publish();
+      document.addEventListener("DOMContentLoaded", function(event) {
+        var publisher = new WebRTCjs.WebRTCjs()
+        publisher.publish();
+      });
     </script>
   </body>
 </html>

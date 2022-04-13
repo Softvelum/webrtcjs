@@ -14,9 +14,6 @@ module.exports = {
     }),
   ],
   output: {
-    // library: "WebRTCjs",
-    // libraryTarget: "var",
-    // globalObject: 'this',
     filename: '[contenthash].bundle.js',
     path: path.resolve(__dirname, 'dist'),
     library: {
@@ -25,4 +22,19 @@ module.exports = {
     },
     clean: true,
   },
+  module: {
+    rules: [
+      {
+        test: /\.m?js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env'],
+            plugins: ['@babel/plugin-transform-runtime']
+          }
+        }
+      }
+    ]
+  }
 };
