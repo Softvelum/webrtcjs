@@ -1,4 +1,4 @@
-async function publish() {
+export async function publish() {
 
   stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
 
@@ -38,6 +38,3 @@ async function publish() {
   await pc.setRemoteDescription ({type:"answer", sdp:answer});
 
 }
-
-
-publish();
