@@ -19,7 +19,9 @@ module.exports = {
     library: {
       name: 'WebRTCjs',
       type: 'umd',
+      export: 'default'
     },
+    globalObject: 'this',
     clean: true,
   },
   module: {

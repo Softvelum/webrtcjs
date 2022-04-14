@@ -1,7 +1,7 @@
-export class WebRTCjs {
+export default class WebRTCjs {
   async publish() {
 
-    stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
 
     let pc = new RTCPeerConnection()
 
@@ -24,7 +24,7 @@ export class WebRTCjs {
 
     await pc.setLocalDescription (offer)
 
-    url = "https://127.0.0.1:8443/live/whip?whipauth=alex:alex"
+    let url = "https://127.0.0.1:8443/live/whip?whipauth=alex:alex"
     //Do the post request to the WHIP endpoint with the SDP offer
     const fetched = await fetch (url, {
           method : "POST",
