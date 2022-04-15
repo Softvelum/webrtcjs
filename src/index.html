@@ -11,7 +11,13 @@
     <div id="logs"></div>
     <script type="text/javascript">
       document.addEventListener("DOMContentLoaded", function(event) {
-        var publisher = new WebRTCjs();
+        var config = {
+          whipUrl:      'https://127.0.0.1:8443/live/whip',
+          whipUsername: 'alex',
+          whipPassword: 'alex',
+          logLevel:     'info'
+        };
+        var publisher = new WebRTCjs(config);
         publisher.publish();
       });
     </script>

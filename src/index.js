@@ -1,30 +1,52 @@
+const Logger = require('./logger').default;
+
 export default class WebRTCjs {
+
+  constructor(options)
+	{
+    let defaults = {
+      whipUsername: null,
+      whipPassword: null,
+      whipUrl:      '',
+      logLevel:     'error'
+    };
+
+    // Merge defaults and options, without modifying defaults
+    this.settings = Object.assign({}, defaults, options);
+
+    this.logger = new Logger(this.settings.logLevel);
+
+    this.logger.info('settings:', this.settings);
+	}
+
   async publish() {
+    this.stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    this.pc = new RTCPeerConnection();
 
-    let stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-
-    let pc = new RTCPeerConnection()
-
-    pc.onconnectionstatechange = (event) =>{
-      switch (pc.connectionState)
+    this.pc.onconnectionstatechange = (event) => {
+      switch (this.pc.connectionState)
       {
         default:
-        console.log("ERROR: " + pc.connectionState);
+        this.logger.info('connectionState:', this.pc.connectionState);
         break;
       }
     }
 
-    document.getElementById('localVideo').srcObject = stream
-    stream.getTracks().forEach(track => pc.addTrack(track, stream))
+    document.getElementById('localVideo').srcObject = this.stream
+    this.stream.getTracks().forEach(track => this.pc.addTrack(track, this.stream))
 
     //Create SDP offer
-    const offer = await pc.createOffer();
+    const offer = await this.pc.createOffer();
 
-    console.log("ERROR: offser\n" + offer.sdp);
+    this.logger.info('offer:', offer.sdp);
 
-    await pc.setLocalDescription (offer)
+    await this.pc.setLocalDescription (offer)
 
-    let url = "https://127.0.0.1:8443/live/whip?whipauth=alex:alex"
+    let url = this.settings.whipUrl;
+    if (this.settings.whipUsername && this.settings.whipPassword) {
+      url = url + '?whipauth=' + this.settings.whipUsername + ':' + this.settings.whipPassword;
+    }
+    this.logger.info('url:', url);
     //Do the post request to the WHIP endpoint with the SDP offer
     const fetched = await fetch (url, {
           method : "POST",
@@ -34,9 +56,9 @@ export default class WebRTCjs {
 
     //Get the SDP answer
     const answer = await fetched.text();
-    console.log("ERROR: answer\n" + answer);
+    this.logger.info('answer:', answer);
 
-    await pc.setRemoteDescription ({type:"answer", sdp:answer});
+    await this.pc.setRemoteDescription ({type:"answer", sdp:answer});
 
   }
 }
