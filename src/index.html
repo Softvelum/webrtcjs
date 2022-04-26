@@ -5,6 +5,9 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
+    <h3> URL </h3>
+    <input id="publishUrl" value="https://127.0.0.1:8443/live/whip?whipauth=alex:alex">
+    <input type="button" id="publishBtn" value="Publish">
     <h3> Local Video </h3>
     <video id="localVideo" width="640" height="480" autoplay muted></video> <br />
     <h3> Logs </h3>
@@ -12,13 +15,15 @@
     <script type="text/javascript">
       document.addEventListener("DOMContentLoaded", function(event) {
         var config = {
-          whipUrl:      'https://127.0.0.1:8443/live/whip',
-          whipUsername: 'alex',
-          whipPassword: 'alex',
-          logLevel:     'info'
+          whipUrl:      document.getElementById("publishUrl").value,
+          logLevel:     'info',
+          videoElement: document.getElementById('localVideo')
         };
         var publisher = new WebRTCjs(config);
-        publisher.publish();
+
+        document.getElementById("publishBtn").addEventListener("click", function () {
+          publisher.publish();
+        });
       });
     </script>
   </body>

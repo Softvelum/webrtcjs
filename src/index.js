@@ -5,10 +5,9 @@ export default class WebRTCjs {
   constructor(options)
 	{
     let defaults = {
-      whipUsername: null,
-      whipPassword: null,
       whipUrl:      '',
-      logLevel:     'error'
+      logLevel:     'error',
+      videoElement: null
     };
 
     // Merge defaults and options, without modifying defaults
@@ -32,7 +31,9 @@ export default class WebRTCjs {
       }
     }
 
-    document.getElementById('localVideo').srcObject = this.stream
+    if (this.settings.videoElement) {
+      this.settings.videoElement.srcObject = this.stream;
+    }
     this.stream.getTracks().forEach(track => this.pc.addTrack(track, this.stream))
 
     //Create SDP offer
@@ -42,13 +43,9 @@ export default class WebRTCjs {
 
     await this.pc.setLocalDescription (offer)
 
-    let url = this.settings.whipUrl;
-    if (this.settings.whipUsername && this.settings.whipPassword) {
-      url = url + '?whipauth=' + this.settings.whipUsername + ':' + this.settings.whipPassword;
-    }
-    this.logger.info('url:', url);
+    this.logger.info('url:', this.settings.whipUrl);
     //Do the post request to the WHIP endpoint with the SDP offer
-    const fetched = await fetch (url, {
+    const fetched = await fetch (this.settings.whipUrl, {
           method : "POST",
           body: offer.sdp,
           headers:{ "Content-Type" : "application/sdp"}
