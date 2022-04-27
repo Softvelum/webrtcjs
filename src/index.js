@@ -1,4 +1,4 @@
-import './style.css';
+import './style.sass';
 
 const Logger = require('./logger').default;
 

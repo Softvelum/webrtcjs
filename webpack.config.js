@@ -32,10 +32,11 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/i,
+        test: /\.s[ac]ss$/i,
         use: [
           devMode ? "style-loader" : MiniCssExtractPlugin.loader,
-          "css-loader"
+          "css-loader",
+          "sass-loader"
         ],
       },
       {
