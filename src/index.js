@@ -1,3 +1,5 @@
+import './style.css';
+
 const Logger = require('./logger').default;
 
 export default class WebRTCjs {
