@@ -14,7 +14,8 @@ export default class WebRTCjs {
       onConnectionStateChange: null,
       onPublisherCreated: null,
       onOffer: null,
-      onAnswer: null
+      onAnswer: null,
+      onConnectionError: null
     };
 
     // Merge defaults and options, without modifying defaults
@@ -60,12 +61,18 @@ export default class WebRTCjs {
     await this.pc.setLocalDescription (offer)
 
     this.logger.info('url:', this.settings.whipUrl);
-    //Do the post request to the WHIP endpoint with the SDP offer
-    const fetched = await fetch (this.settings.whipUrl, {
-          method : "POST",
-          body: offer.sdp,
-          headers:{ "Content-Type" : "application/sdp"}
-    });
+
+    try {
+      //Do the post request to the WHIP endpoint with the SDP offer
+      const fetched = await fetch (this.settings.whipUrl, {
+            method : "POST",
+            body: offer.sdp,
+            headers:{ "Content-Type" : "application/sdp"}
+      });
+    } catch (error) {
+      this.logger.error('Connection error');
+      this.callback('onConnectionError', 'Connection error');
+    }
 
     //Get the SDP answer
     const answer = await fetched.text();
