@@ -23,8 +23,14 @@ export default class WebRTCjs {
     this.logger = new Logger(this.settings.logLevel);
 
     this.logger.info('settings:', this.settings);
-    if (this.settings.onPublisherCreated) {this.settings.onPublisherCreated(this.settings)}
+    this.callback('onPublisherCreated', this.settings);
 	}
+
+  callback(cbName, cbPayload) {
+    if (typeof this.settings[cbName] === "function") {
+      this.settings[cbName].apply( this, [cbPayload] );
+    }
+  }
 
   async publish() {
     this.stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -35,7 +41,7 @@ export default class WebRTCjs {
       {
         default:
         this.logger.info('connectionState:', this.pc.connectionState);
-        if (this.settings.onConnectionStateChange) {this.settings.onConnectionStateChange(this.pc.connectionState)}
+        this.callback('onConnectionStateChange', this.pc.connectionState);
         break;
       }
     }
@@ -49,7 +55,7 @@ export default class WebRTCjs {
     const offer = await this.pc.createOffer();
 
     this.logger.info('offer:', offer.sdp);
-    if (this.settings.onOffer) {this.settings.onOffer(offer.sdp)}
+    this.callback('onOffer', offer.sdp);
 
     await this.pc.setLocalDescription (offer)
 
@@ -64,7 +70,7 @@ export default class WebRTCjs {
     //Get the SDP answer
     const answer = await fetched.text();
     this.logger.info('answer:', answer);
-    if (this.settings.onAnswer) {this.settings.onAnswer(answer)}
+    this.callback('onAnswer', answer);
 
     await this.pc.setRemoteDescription ({type:"answer", sdp:answer});
 

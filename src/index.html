@@ -34,7 +34,7 @@
           logLevel:     'info',
           videoElement: document.getElementById('localVideo'),
 
-          onPublisherCreated: function(settings){ logItem('Publisher created'); },
+          onPublisherCreated: function(settings){ logItem('Ready to WebRTC publishing'); },
           onConnectionStateChange: function(connectionState){ logItem('Connection state change', connectionState); },
           onOffer: function(offer){ logItem('SDP offer', offer); },
           onAnswer: function(answer){ logItem('SDP answer', answer); }
