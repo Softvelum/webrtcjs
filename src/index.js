@@ -9,7 +9,12 @@ export default class WebRTCjs {
     let defaults = {
       whipUrl:      '',
       logLevel:     'error',
-      videoElement: null
+      videoElement: null,
+
+      onConnectionStateChange: null,
+      onPublisherCreated: null,
+      onOffer: null,
+      onAnswer: null
     };
 
     // Merge defaults and options, without modifying defaults
@@ -18,6 +23,7 @@ export default class WebRTCjs {
     this.logger = new Logger(this.settings.logLevel);
 
     this.logger.info('settings:', this.settings);
+    if (this.settings.onPublisherCreated) {this.settings.onPublisherCreated(this.settings)}
 	}
 
   async publish() {
@@ -29,6 +35,7 @@ export default class WebRTCjs {
       {
         default:
         this.logger.info('connectionState:', this.pc.connectionState);
+        if (this.settings.onConnectionStateChange) {this.settings.onConnectionStateChange(this.pc.connectionState)}
         break;
       }
     }
@@ -42,6 +49,7 @@ export default class WebRTCjs {
     const offer = await this.pc.createOffer();
 
     this.logger.info('offer:', offer.sdp);
+    if (this.settings.onOffer) {this.settings.onOffer(offer.sdp)}
 
     await this.pc.setLocalDescription (offer)
 
@@ -56,6 +64,7 @@ export default class WebRTCjs {
     //Get the SDP answer
     const answer = await fetched.text();
     this.logger.info('answer:', answer);
+    if (this.settings.onAnswer) {this.settings.onAnswer(answer)}
 
     await this.pc.setRemoteDescription ({type:"answer", sdp:answer});
 

@@ -6,18 +6,38 @@
   </head>
   <body>
     <h3> URL </h3>
-    <input id="publishUrl" value="https://127.0.0.1:8443/live/whip?whipauth=alex:alex">
-    <input type="button" id="publishBtn" value="Publish">
+    <div id="publishUrlWrp">
+      <input id="publishUrl" value="https://127.0.0.1:8443/live/whip?whipauth=username:password">
+      <input type="button" id="publishBtn" value="Publish">
+    </div>
     <h3> Local Video </h3>
-    <video id="localVideo" width="640" height="480" autoplay muted></video> <br />
+    <div id="localVideoWrp">
+      <video id="localVideo" autoplay muted></video> <br />
+    </div>
     <h3> Logs </h3>
     <div id="logs"></div>
     <script type="text/javascript">
+      var logItem = function(title,msg) {
+        var logs = document.getElementById("logs");
+        var p = document.createElement("p");
+        var innerHTML = '<b>' + title + '</b>';
+        if (msg) { innerHTML = innerHTML + '<br>' + msg.replace(/\n/g, '<br>')}
+        p.innerHTML = innerHTML;
+
+        logs.appendChild(p);
+        logs.scrollTop = logs.scrollHeight;
+      }
+
       document.addEventListener("DOMContentLoaded", function(event) {
         var config = {
           whipUrl:      document.getElementById("publishUrl").value,
           logLevel:     'info',
-          videoElement: document.getElementById('localVideo')
+          videoElement: document.getElementById('localVideo'),
+
+          onPublisherCreated: function(settings){ logItem('Publisher created'); },
+          onConnectionStateChange: function(connectionState){ logItem('Connection state change', connectionState); },
+          onOffer: function(offer){ logItem('SDP offer', offer); },
+          onAnswer: function(answer){ logItem('SDP answer', answer); }
         };
         var publisher = new WebRTCjs(config);
 
