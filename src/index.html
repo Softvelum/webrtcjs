@@ -29,20 +29,19 @@
       }
 
       document.addEventListener("DOMContentLoaded", function(event) {
-        var config = {
-          whipUrl:      document.getElementById("publishUrl").value,
-          logLevel:     'info',
-          videoElement: document.getElementById('localVideo'),
-
-          onPublisherCreated: function(settings){ logItem('Ready to WebRTC publishing'); },
-          onConnectionStateChange: function(connectionState){ logItem('Connection state change', connectionState); },
-          onOffer: function(offer){ logItem('SDP offer', offer); },
-          onAnswer: function(answer){ logItem('SDP answer', answer); },
-          onConnectionError: function(){ logItem('Connection error'); }
-        };
-        var publisher = new WebRTCjs(config);
-
         document.getElementById("publishBtn").addEventListener("click", function () {
+          var config = {
+            whipUrl:      document.getElementById("publishUrl").value,
+            logLevel:     'info',
+            videoElement: document.getElementById('localVideo'),
+
+            onPublisherCreated: function(settings){ logItem('Ready to WebRTC publishing'); },
+            onConnectionStateChange: function(connectionState){ logItem('Connection state change', connectionState); },
+            onOffer: function(offer){ logItem('SDP offer', offer); },
+            onAnswer: function(answer){ logItem('SDP answer', answer); },
+            onConnectionError: function(){ logItem('Connection error'); }
+          };
+          var publisher = new WebRTCjs(config);
           publisher.publish();
         });
       });
