@@ -62,15 +62,16 @@ export default class WebRTCjs {
 
     this.logger.info('url:', this.settings.whipUrl);
 
+    var fetched;
     try {
       //Do the post request to the WHIP endpoint with the SDP offer
-      const fetched = await fetch (this.settings.whipUrl, {
+      fetched = await fetch (this.settings.whipUrl, {
             method : "POST",
             body: offer.sdp,
             headers:{ "Content-Type" : "application/sdp"}
       });
     } catch (error) {
-      this.logger.error('Connection error');
+      this.logger.error('Connection error'); //todo handle connection error w/o try/catch
       this.callback('onConnectionError', 'Connection error');
     }
 
