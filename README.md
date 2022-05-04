@@ -1,6 +1,8 @@
 # WebRTC Javascript library
 
 WebRTC JavaScript publisher library allows adding WebRTC publishing capabilities to your web pages.
+It uses WHIP signaling.
+
 Use its code in your projects or take it as is for embedding into your pages to connect your users to [Nimble Streamer](https://wmspanel.com/nimble).
 To learn more about server setup, [read WebRTC setup article](https://blog.wmspanel.com/2022/05/webrtc-publish-setup-nimble-streamer.html).
 
