@@ -1,11 +1,12 @@
 # WebRTC Javascript library
 
-WebRTC JavaScript publisher library allows adding publishing capabilities to your web pages.
+WebRTC JavaScript publisher library allows adding WebRTC publishing capabilities to your web pages.
 Use its code in your projects or take it as is for embedding into your pages to connect your users to [Nimble Streamer](https://wmspanel.com/nimble).
+To learn more about server setup, [read WebRTC setup article](https://blog.wmspanel.com/2022/05/webrtc-publish-setup-nimble-streamer.html).
 
 ## Getting Started
 
-### Add library to html
+### Add library to HTML
 ```html
 <script defer="defer" src="2bec5718f3d2c4f31e84.bundle.js">
 ```
@@ -42,16 +43,16 @@ publisher.publish();
 
 ## Configuration options
 
-- `whipUrl` - publish URL with authorization parameters.
+- `whipUrl` - publishing URL with authorization parameters.
 - `logLevel` - the log level: `info`, or `error`.
 - `videoElement` - `<video>` tag to local monitoring published stream.
 
 ## Callbacks
 
-- `onPublisherCreated` - called when publisher instance created with provided configuration. Parameters: `settings`.
-- `onConnectionStateChange` - called when connection state changed. Parameters: `connectionState`.
-- `onOffer` - called when sdp offer ready. Parameters: `offer`.
-- `onAnswer` - called when server answer recewived. Parameters: `answer`.
+- `onPublisherCreated` - called when publisher instance has been created with the provided configuration. Parameters: `settings`.
+- `onConnectionStateChange` - called when connection state has changed. Parameters: `connectionState`.
+- `onOffer` - called when SDP offer is ready. Parameters: `offer`.
+- `onAnswer` - called when server answer has been received. Parameters: `answer`.
 - `onConnectionError` - called if connection error happens. Has no parameters.
 
 ## Callback usage example
