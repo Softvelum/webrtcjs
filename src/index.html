@@ -42,8 +42,9 @@
             onAnswer: function(answer){ logItem('SDP answer', answer); },
             onConnectionError: function(){ logItem('Connection error'); }
           };
-          var publisher = new WebRTCjs(config);
-          publisher.publish();
+          // add publisher to global scope to prevent garbage collection
+          window.publisher = new WebRTCjs(config);
+          window.publisher.publish();
         });
       });
     </script>
