@@ -37,6 +37,7 @@
 
             onPublisherCreated: function(settings){ logItem('Ready to WebRTC publishing'); },
             onConnectionStateChange: function(connectionState){ logItem('Connection state change', connectionState); },
+            onIceconnectionStateChange: function(connectionIceState){ logItem('Connection ice state change', connectionIceState); },
             onOffer: function(offer){ logItem('SDP offer', offer); },
             onAnswer: function(answer){ logItem('SDP answer', answer); },
             onConnectionError: function(){ logItem('Connection error'); }
