@@ -12,7 +12,7 @@ Use [demo publishing page](https://softvelum.com/webrtc/demo/) to publish to you
 
 ### Add library to HTML
 ```html
-<script defer="defer" src="2bec5718f3d2c4f31e84.bundle.js">
+<script defer="defer" src="310dfe9492d5aceadcf8.bundle.js">
 ```
 
 ### Usage
@@ -29,7 +29,7 @@ publisher.publish();
 <!DOCTYPE html>
 <html>
   <head>
-    <script defer="defer" src="2bec5718f3d2c4f31e84.bundle.js">
+    <script defer="defer" src="310dfe9492d5aceadcf8.bundle.js">
   </head>
   <body>
     <script type="text/javascript">
@@ -64,7 +64,7 @@ publisher.publish();
 ```javascript
 var config = {
   whipUrl: 'https://127.0.0.1:8443/live/whip?whipauth=username:password',
-  
+
   onPublisherCreated: function(settings){ console.log('Ready to WebRTC publishing'); }
 };
 ```
