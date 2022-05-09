@@ -37,7 +37,7 @@ export default class WebRTCjs {
     this.stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
     this.pc = new RTCPeerConnection();
 
-    if (pc.connectionState != undefined) {
+    if (this.pc.connectionState != undefined) {
         this.pc.onconnectionstatechange = (event) => {
           switch (this.pc.connectionState)
           {
@@ -48,9 +48,9 @@ export default class WebRTCjs {
           }
         }
     } else {
-        pc.oniceconnectionstatechange = event => {
-            this.logger.info('iceConnectionState:', pc.iceConnectionState);
-            this.callback('onIceconnectionStateChange', this.pc.iceConnectionState);            
+        this.pc.oniceconnectionstatechange = event => {
+            this.logger.info('iceConnectionState:', this.pc.iceConnectionState);
+            this.callback('onIceconnectionStateChange', this.pc.iceConnectionState);
         };
 
     }
