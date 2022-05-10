@@ -25,6 +25,10 @@ export default class WebRTCjs {
 
     this.logger.info('settings:', this.settings);
     this.callback('onPublisherCreated', this.settings);
+
+    if ("undefined" != typeof window){
+      window.webRTCjsInstance = this; // Firefox GC workaround
+    }
 	}
 
   callback(cbName, cbPayload) {
