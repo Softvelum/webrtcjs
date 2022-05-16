@@ -11,6 +11,8 @@ export default class WebRTCjs {
       logLevel:     'error',
       videoElement: null,
       videoBandwidth: 0,
+      width: 640,
+      height: 480,
 
       onConnectionStateChange: null,
       onPublisherCreated: null,
@@ -39,7 +41,17 @@ export default class WebRTCjs {
   }
 
   async publish() {
-    this.stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    
+    let constraints = {
+        audio: true,
+        video: {
+            width: this.settings.width,
+            height: this.settings.height
+        }
+    };
+
+    this.stream = await navigator.mediaDevices.getUserMedia(constraints);
+
     this.pc = new RTCPeerConnection();
 
 

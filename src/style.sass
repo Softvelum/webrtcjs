@@ -24,13 +24,20 @@ h3
     border: 1px solid #ccc
     padding: 10px
     font-size: 14px
+#resolutionWrp
+  #resolution
+    width: 120px
+    border: 1px solid #ccc
+    padding: 10px
+    font-size: 14px
 #localVideoWrp
   width: 627px
   background-color: #eee
   text-align: center
   #localVideo
-    width: 320px
-    height: 240px
+    // rotate video to make it natural
+    transform: scale(-1, 1) /*For Firefox (& IE) */
+    -webkit-transform: scale(-1, 1) /*for Chrome & Opera (& Safari) */
 #logs
   width: 607px
   height: 300px

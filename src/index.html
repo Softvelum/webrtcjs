@@ -13,6 +13,16 @@
     <h3> Video Bandwidth Limit Kb</h3>
     <div id="bandwidthWrp">
       <input id="bandwidth" value="2000">
+        kbps      
+    </div>
+    <h3> Video Resolution</h3>    
+    <div id="resolutionWrp">
+        <select id="resolution">
+            <option value="1920x1080">1920x1080</option>          
+            <option value="1280x720" selected>1280x720</option>
+            <option value="640x480">640x480</option>
+            <option value="320x240">320x240</option>
+        </select>
     </div>
     <h3> Local Video </h3>
     <div id="localVideoWrp">
@@ -39,7 +49,8 @@
             logLevel:     'info',
             videoElement: document.getElementById('localVideo'),
             videoBandwidth: document.getElementById("bandwidth").value,
-
+            width: document.getElementById("resolution").value.split('x')[0],
+            height: document.getElementById("resolution").value.split('x')[1],
             onPublisherCreated: function(settings){ logItem('Ready to WebRTC publishing'); },
             onConnectionStateChange: function(connectionState){ logItem('Connection state change', connectionState); },
             onIceconnectionStateChange: function(connectionIceState){ logItem('Connection ice state change', connectionIceState); },
@@ -47,6 +58,9 @@
             onAnswer: function(answer){ logItem('SDP answer', answer); },
             onConnectionError: function(){ logItem('Connection error'); }
           };
+
+          document.getElementById("resolution").disabled = true;
+          document.getElementById("bandwidth").disabled = true;
           var publisher = new WebRTCjs(config);
           publisher.publish();
         });
