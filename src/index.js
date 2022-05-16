@@ -10,6 +10,7 @@ export default class WebRTCjs {
       whipUrl:      '',
       logLevel:     'error',
       videoElement: null,
+      videoBandwidth: 0,
 
       onConnectionStateChange: null,
       onPublisherCreated: null,
@@ -41,6 +42,7 @@ export default class WebRTCjs {
     this.stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
     this.pc = new RTCPeerConnection();
 
+
     if (this.pc.connectionState != undefined) {
         this.pc.onconnectionstatechange = (event) => {
           switch (this.pc.connectionState)
@@ -63,6 +65,28 @@ export default class WebRTCjs {
       this.settings.videoElement.srcObject = this.stream;
     }
     this.stream.getTracks().forEach(track => this.pc.addTrack(track, this.stream))
+
+    window.webRTCjsInstance.pc.getSenders().forEach(sender=>{
+      if(sender.track.kind==="video") {
+        const parameters = sender.getParameters();
+
+        if (!parameters.encodings) {
+          parameters.encodings = [{}]; // old safari need this
+        }
+        bandwidth = parseInt(this.settings.videoBandwidth); 
+
+        if (Number.isNaN(bandwidth)) {
+          delete parameters.encodings[0].maxBitrate;
+        } else {
+          parameters.encodings[0].maxBitrate = bandwidth * 1000;
+        }
+        sender.setParameters(parameters)
+            .then(() => {
+              this.logger.info('bandwidth limit is set', bandwidth);
+            })
+            .catch(e => console.error(e));        
+      }
+    });    
 
     //Create SDP offer
     const offer = await this.pc.createOffer();
