@@ -13,12 +13,12 @@
     <h3> Video Bandwidth Limit Kb</h3>
     <div id="bandwidthWrp">
       <input id="bandwidth" value="2000">
-        kbps      
+        kbps
     </div>
-    <h3> Video Resolution</h3>    
+    <h3> Video Resolution</h3>
     <div id="resolutionWrp">
         <select id="resolution">
-            <option value="1920x1080">1920x1080</option>          
+            <option value="1920x1080">1920x1080</option>
             <option value="1280x720" selected>1280x720</option>
             <option value="640x480">640x480</option>
             <option value="320x240">320x240</option>
@@ -41,6 +41,23 @@
         logs.appendChild(p);
         logs.scrollTop = logs.scrollHeight;
       }
+
+      const configurationChangeHandler = function(url_param) {
+        return (e) => {
+          urlParams.set(url_param, e.target.value)
+          history.pushState({},'','?'+urlParams.toString());
+        }
+      }
+
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+
+      const persistedParameters = ['publishUrl', 'bandwidth', 'resolution'];
+
+      persistedParameters.forEach(function(p){
+        document.getElementById(p).value = (urlParams.get(p) || document.getElementById(p).value);
+        document.getElementById(p).addEventListener('input', configurationChangeHandler(p));
+      })
 
       document.addEventListener("DOMContentLoaded", function(event) {
         document.getElementById("publishBtn").addEventListener("click", function () {
