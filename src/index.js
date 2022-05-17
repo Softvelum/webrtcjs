@@ -41,7 +41,7 @@ export default class WebRTCjs {
   }
 
   async publish() {
-    
+
     let constraints = {
         audio: true,
         video: {
@@ -82,10 +82,10 @@ export default class WebRTCjs {
       if(sender.track.kind==="video") {
         const parameters = sender.getParameters();
 
-        if (!parameters.encodings) {
+        if (!parameters.encodings || undefined === parameters.encodings[0]) {
           parameters.encodings = [{}]; // old safari need this
         }
-        bandwidth = parseInt(this.settings.videoBandwidth); 
+        bandwidth = parseInt(this.settings.videoBandwidth);
 
         if (Number.isNaN(bandwidth)) {
           delete parameters.encodings[0].maxBitrate;
@@ -96,9 +96,9 @@ export default class WebRTCjs {
             .then(() => {
               this.logger.info('bandwidth limit is set', bandwidth);
             })
-            .catch(e => console.error(e));        
+            .catch(e => console.error(e));
       }
-    });    
+    });
 
     //Create SDP offer
     const offer = await this.pc.createOffer();
