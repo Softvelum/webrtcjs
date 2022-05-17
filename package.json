@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "NODE_ENV='production' webpack",
-    "build_dev": "NODE_ENV='development' webpack",
+    "build_dev": "NODE_ENV='development' BUILD_MODE=release webpack",
     "watch": "NODE_ENV='development' webpack --watch",
     "start": "NODE_ENV='development' webpack serve --open"
   },

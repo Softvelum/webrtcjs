@@ -1,5 +1,6 @@
 const path = require('path');
 const devMode = process.env.NODE_ENV !== "production";
+const releaseMode = process.env.BUILD_MODE == "release";
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
@@ -15,7 +16,7 @@ module.exports = {
       title: 'WebRTCjs demo',
       template: 'src/index.html'
     }),
-  ].concat(devMode ? [] : [new MiniCssExtractPlugin({
+  ].concat((devMode && !releaseMode) ? [] : [new MiniCssExtractPlugin({
     filename: '[contenthash].[name].css'
   })]),
   output: {
@@ -34,7 +35,7 @@ module.exports = {
       {
         test: /\.s[ac]ss$/i,
         use: [
-          devMode ? "style-loader" : MiniCssExtractPlugin.loader,
+          (devMode && !releaseMode) ? "style-loader" : MiniCssExtractPlugin.loader,
           "css-loader",
           "sass-loader"
         ],
