@@ -24,14 +24,29 @@
             <option value="640x480">640x480</option>
             <option value="320x240">320x240</option>
         </select>
+        <input type="checkbox" id="natural" checked onclick="onSwapRotation()">
+        <label for="natural">Natural Video</label>
     </div>
     <h3> Local Video </h3>
     <div id="localVideoWrp">
-      <video id="localVideo" autoplay muted playsinline></video> <br />
+      <video id="localVideo" class="rotatedVideo" autoplay muted playsinline></video> <br />
     </div>
     <h3> Logs </h3>
     <div id="logs"></div>
     <script type="text/javascript">
+      function onSwapRotation() {
+        var checkBox = document.getElementById("natural");
+        // Get the output text
+        var localVideo = document.getElementById("localVideo");
+
+        // If the checkbox is checked, display the output text
+        if (checkBox.checked == true){
+          localVideo.classList.add("rotatedVideo");
+        } else {
+          localVideo.classList.remove("rotatedVideo");
+        }        
+      }
+
       var logItem = function(title,msg) {
         var logs = document.getElementById("logs");
         var p = document.createElement("p");
