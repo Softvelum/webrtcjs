@@ -13,7 +13,8 @@ export default class WebRTCjs {
       videoBandwidth: 0,
       width: 640,
       height: 480,
-
+      videoRequired: true,
+      audioRequired: true,
       onConnectionStateChange: null,
       onPublisherCreated: null,
       onOffer: null,
@@ -42,13 +43,18 @@ export default class WebRTCjs {
 
   async publish() {
 
-    let constraints = {
-        audio: true,
-        video: {
+    let constraints = {};
+
+
+    constraints.audio = this.settings.audioRequired;
+    if(this.settings.videoRequired) {
+        constraints.video = {
             width: this.settings.width,
             height: this.settings.height
-        }
-    };
+        };
+    } else {
+      constraints.video = false;
+    }
 
     this.stream = await navigator.mediaDevices.getUserMedia(constraints);
 

@@ -26,6 +26,10 @@
         </select>
         <input type="checkbox" id="natural" checked onclick="onSwapRotation()">
         <label for="natural">Natural Video</label>
+        <input type="checkbox" id="videoRequired" checked>
+        <label for="videoRequired">Stream Video</label>
+        <input type="checkbox" id="audioRequired" checked>
+        <label for="audioRequired">Stream Audio</label>
     </div>
     <h3> Local Video </h3>
     <div id="localVideoWrp">
@@ -84,6 +88,9 @@
             videoBandwidth: document.getElementById("bandwidth").value,
             width: document.getElementById("resolution").value.split('x')[0],
             height: document.getElementById("resolution").value.split('x')[1],
+            videoRequired: document.getElementById("videoRequired").checked,
+            audioRequired: document.getElementById("audioRequired").checked,
+
             onPublisherCreated: function(settings){ logItem('Ready to WebRTC publishing'); },
             onConnectionStateChange: function(connectionState){ logItem('Connection state change', connectionState); },
             onIceconnectionStateChange: function(connectionIceState){ logItem('Connection ice state change', connectionIceState); },
