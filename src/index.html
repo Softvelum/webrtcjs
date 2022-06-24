@@ -80,7 +80,17 @@
       })
 
       document.addEventListener("DOMContentLoaded", function(event) {
+        var publisher;
+
         document.getElementById("publishBtn").addEventListener("click", function () {
+          if (publisher) {
+              document.getElementById("publishBtn").value = "Publish";
+              publisher.stop();
+              publisher = null;
+              return;
+          }
+          document.getElementById("publishBtn").value = "Unpublish";
+
           var config = {
             whipUrl:      document.getElementById("publishUrl").value,
             logLevel:     'info',
@@ -101,7 +111,8 @@
 
           document.getElementById("resolution").disabled = true;
           document.getElementById("bandwidth").disabled = true;
-          var publisher = new WebRTCjs(config);
+          
+          publisher = new WebRTCjs(config);
           publisher.publish();
         });
       });

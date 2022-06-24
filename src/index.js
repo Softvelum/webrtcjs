@@ -59,7 +59,7 @@ export default class WebRTCjs {
     this.stream = await navigator.mediaDevices.getUserMedia(constraints);
 
     this.pc = new RTCPeerConnection();
-
+   
 
     if (this.pc.connectionState != undefined) {
         this.pc.onconnectionstatechange = (event) => {
@@ -96,7 +96,7 @@ export default class WebRTCjs {
 
     this.logger.info('url:', this.settings.whipUrl);
 
-    var fetched;
+    let fetched;
     try {
       //Do the post request to the WHIP endpoint with the SDP offer
       fetched = await fetch (this.settings.whipUrl, {
@@ -107,6 +107,17 @@ export default class WebRTCjs {
     } catch (error) {
       this.logger.error('Connection error'); //todo handle connection error w/o try/catch
       this.callback('onConnectionError', 'Connection error');
+    }
+
+    if (!fetched.ok) {
+      this.logger.error('Connection error ' + fetched.status); //todo handle connection error w/o try/catch
+      this.callback('onConnectionError', 'Connection error ' + fetched.status);
+      this.logger.error(fetched);
+      return;
+    }
+
+    if (fetched.headers.get("location")) {
+      this.location = new URL(fetched.headers.get("location"), this.settings.whipUrl);
     }
 
     //Get the SDP answer
@@ -138,6 +149,44 @@ export default class WebRTCjs {
             .catch(e => console.error(e));
       }
     });
+  }
 
+  async stop()
+  {
+    if (!this.pc) {
+      // Already stopped
+      return
+    }
+
+    if (this.location) {
+      let fetched;
+      try {
+        //Send a delete
+        fetched = await fetch(this.location, {
+          method: "DELETE"
+        });
+      } catch (error) {
+        this.logger.error('failed to delete session with error ' + error); //todo handle connection error w/o try/catch
+        this.callback('onConnectionError', 'Connection error ' + error);
+      }
+
+      if (!fetched.ok) {
+        this.logger.error('failed to delete session ' + fetched.status); //todo handle connection error w/o try/catch
+        this.callback('onConnectionError', 'failed to delete session ' + fetched.status);
+        this.logger.error(fetched);
+        return;
+      }
+      this.callback('onConnectionStateChange', 'session deleted');
+    }
+
+
+    this.settings.videoElement.srcObject = null;
+    // wait a little before pc.close to send some frames to Nimble to make it handle DELETE requests
+    // if we run close right after DELETE nimble will wait to ice timeout and delete session only after that
+    await new Promise(r => setTimeout(r, 200));
+    this.pc.close();
+    this.pc = null;
+
+    this.callback('onConnectionStateChange', 'disconnected');
   }
 }
