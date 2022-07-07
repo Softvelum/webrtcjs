@@ -89,6 +89,17 @@ export default class WebRTCjs {
     //Create SDP offer
     const offer = await this.pc.createOffer();
 
+    // !!!!!!!!! Start offer mungling!!!!!!!!!!!!!!
+    // mangle sdp to add NACK support for opus
+    // To add NACK in offer we have to add it manually see https://bugs.chromium.org/p/webrtc/issues/detail?id=4543 for details
+
+    let opusCodecId = offer.sdp.match(/a=rtpmap:(\d+) opus\/48000\/2/);
+    
+    if(opusCodecId !== null) {
+      offer.sdp = offer.sdp.replace("opus/48000/2\r\n", "opus/48000/2\r\na=rtcp-fb:"+opusCodecId[1]+ " nack\r\n")
+    }
+    // !!!!!!!!!!! Stop offer mungling !!!!!!!!!!!!!!!1
+
     this.logger.info('offer:', offer.sdp);
     this.callback('onOffer', offer.sdp);
 
