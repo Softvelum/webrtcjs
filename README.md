@@ -12,7 +12,7 @@ Use [demo publishing page](https://softvelum.com/webrtc/demo/) to publish to you
 
 ### Add library to HTML
 ```html
-<script defer="defer" src="310dfe9492d5aceadcf8.bundle.js">
+<script defer="defer" src="fda0b8224f3acb87a87b.bundle.js">
 ```
 
 ### Usage
@@ -29,7 +29,7 @@ publisher.publish();
 <!DOCTYPE html>
 <html>
   <head>
-    <script defer="defer" src="310dfe9492d5aceadcf8.bundle.js">
+    <script defer="defer" src="fda0b8224f3acb87a87b.bundle.js">
   </head>
   <body>
     <script type="text/javascript">
