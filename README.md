@@ -6,6 +6,13 @@ It uses WHIP signaling.
 Use its code in your projects or take it as is for embedding into your pages to connect your users to [Nimble Streamer](https://wmspanel.com/nimble).
 To learn more about server setup, [read WebRTC setup article](https://blog.wmspanel.com/2022/05/webrtc-publish-setup-nimble-streamer.html).
 
+The following codecs can be used:
+* H.264/AVC, VP8, VP9 video
+* H.265/HEVC video [on Apple devices](https://blog.wmspanel.com/2022/07/hevc-webrtc-apple.html)
+* Opus audio
+
+Specific codecs can be set via "videocodecs" parameter is WHIP URL.
+
 Use [demo publishing page](https://softvelum.com/webrtc/demo/) to publish to your Nimble Streamer instance.
 
 ## Getting Started
