@@ -114,6 +114,14 @@
           
           publisher = new WebRTCjs(config);
           publisher.publish();
+
+          window.addEventListener("beforeunload", function () {
+            if (publisher) {
+                publisher.stop();
+                publisher = null;
+            }
+            return false;
+          }, false);
         });
       });
     </script>

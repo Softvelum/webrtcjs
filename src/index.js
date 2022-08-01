@@ -113,19 +113,20 @@ export default class WebRTCjs {
       fetched = await fetch (this.settings.whipUrl, {
             method : "POST",
             body: offer.sdp,
-            headers:{ "Content-Type" : "application/sdp"}
+            headers:{ "Content-Type" : "application/sdp"},
+            keepalive: true
       });
+      if (!fetched.ok) {
+        this.logger.error('Connection error ' + fetched.status); //todo handle connection error w/o try/catch
+        this.callback('onConnectionError', 'Connection error ' + fetched.status);
+        this.logger.error(fetched);
+        return;
+      }
     } catch (error) {
       this.logger.error('Connection error'); //todo handle connection error w/o try/catch
       this.callback('onConnectionError', 'Connection error');
     }
 
-    if (!fetched.ok) {
-      this.logger.error('Connection error ' + fetched.status); //todo handle connection error w/o try/catch
-      this.callback('onConnectionError', 'Connection error ' + fetched.status);
-      this.logger.error(fetched);
-      return;
-    }
 
     if (fetched.headers.get("location")) {
       this.location = new URL(fetched.headers.get("location"), this.settings.whipUrl);
@@ -174,18 +175,19 @@ export default class WebRTCjs {
       try {
         //Send a delete
         fetched = await fetch(this.location, {
-          method: "DELETE"
+          method: "DELETE",
+          keepalive: true
         });
-      } catch (error) {
-        this.logger.error('failed to delete session with error ' + error); //todo handle connection error w/o try/catch
-        this.callback('onConnectionError', 'Connection error ' + error);
-      }
 
-      if (!fetched.ok) {
-        this.logger.error('failed to delete session ' + fetched.status); //todo handle connection error w/o try/catch
-        this.callback('onConnectionError', 'failed to delete session ' + fetched.status);
-        this.logger.error(fetched);
-        return;
+        if (!fetched.ok) {
+          this.logger.error('failed to delete session ' + fetched.status); //todo handle connection error w/o try/catch
+          this.callback('onConnectionError', 'failed to delete session ' + fetched.status);
+          this.logger.error(fetched);
+          return;
+        }
+      } catch (error) {
+        this.logger.error('failed to delete session [' + this.location + '] with error ' + error); //todo handle connection error w/o try/catch
+        this.callback('onConnectionError', 'Connection error ' + error);
       }
       this.callback('onConnectionStateChange', 'session deleted');
     }
