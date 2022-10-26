@@ -19,7 +19,7 @@ Use [demo publishing page](https://softvelum.com/webrtc/demo/) to publish to you
 
 ### Add library to HTML
 ```html
-<script defer="defer" src="fda0b8224f3acb87a87b.bundle.js"></script>
+<script defer="defer" src="e32af6a81c16a82154b7.bundle.js"></script>
 ```
 
 ### Usage
@@ -36,7 +36,7 @@ publisher.publish();
 <!DOCTYPE html>
 <html>
   <head>
-    <script defer="defer" src="fda0b8224f3acb87a87b.bundle.js"></script>
+    <script defer="defer" src="e32af6a81c16a82154b7.bundle.js"></script>
   </head>
   <body>
     <script type="text/javascript">
@@ -57,6 +57,7 @@ publisher.publish();
 - `whipUrl` - publishing URL with authorization parameters.
 - `logLevel` - the log level: `info`, or `error`.
 - `videoElement` - `<video>` tag to local monitoring published stream.
+- `videoSelect` - `<select>` tag with available cameras.
 
 ## Callbacks
 

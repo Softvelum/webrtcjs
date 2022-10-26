@@ -19,7 +19,8 @@ export default class WebRTCjs {
       onPublisherCreated: null,
       onOffer: null,
       onAnswer: null,
-      onConnectionError: null
+      onConnectionError: null,
+      videoSelect: null
     };
 
     // Merge defaults and options, without modifying defaults
@@ -35,6 +36,8 @@ export default class WebRTCjs {
     }
 	}
 
+
+
   callback(cbName, cbPayload) {
     if (typeof this.settings[cbName] === "function") {
       this.settings[cbName].apply( this, [cbPayload] );
@@ -45,12 +48,13 @@ export default class WebRTCjs {
 
     let constraints = {};
 
-
+    const videoSource = this.settings.videoSelect ? this.settings.videoSelect.value : undefined;
     constraints.audio = this.settings.audioRequired;
     if(this.settings.videoRequired) {
         constraints.video = {
             width: this.settings.width,
-            height: this.settings.height
+            height: this.settings.height,
+            deviceId: videoSource ? {exact: videoSource} : undefined
         };
     } else {
       constraints.video = false;
@@ -59,7 +63,7 @@ export default class WebRTCjs {
     this.stream = await navigator.mediaDevices.getUserMedia(constraints);
 
     this.pc = new RTCPeerConnection();
-   
+
 
     if (this.pc.connectionState != undefined) {
         this.pc.onconnectionstatechange = (event) => {
@@ -94,7 +98,7 @@ export default class WebRTCjs {
     // To add NACK in offer we have to add it manually see https://bugs.chromium.org/p/webrtc/issues/detail?id=4543 for details
 
     let opusCodecId = offer.sdp.match(/a=rtpmap:(\d+) opus\/48000\/2/);
-    
+
     if(opusCodecId !== null) {
       offer.sdp = offer.sdp.replace("opus/48000/2\r\n", "opus/48000/2\r\na=rtcp-fb:"+opusCodecId[1]+ " nack\r\n")
     }
@@ -153,7 +157,7 @@ export default class WebRTCjs {
         } else {
           parameters.encodings[0].maxBitrate = bandwidth * 1000;
         }
-        
+
         sender.setParameters(parameters)
             .then(() => {
               this.logger.info('bandwidth limit is set', bandwidth);

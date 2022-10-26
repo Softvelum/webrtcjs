@@ -31,6 +31,11 @@
         <input type="checkbox" id="audioRequired" checked>
         <label for="audioRequired">Stream Audio</label>
     </div>
+    <h3> Source </h3>
+    <div>
+      <label for="videoSource">Video: </label>
+      <select id="videoSource"></select>
+    </div>
     <h3> Local Video </h3>
     <div id="localVideoWrp">
       <video id="localVideo" class="rotatedVideo" autoplay muted playsinline></video> <br />
@@ -48,7 +53,7 @@
           localVideo.classList.add("rotatedVideo");
         } else {
           localVideo.classList.remove("rotatedVideo");
-        }        
+        }
       }
 
       var logItem = function(title,msg) {
@@ -82,6 +87,22 @@
       document.addEventListener("DOMContentLoaded", function(event) {
         var publisher;
 
+        navigator.mediaDevices.getUserMedia({video: true})
+        .then(function(stream) {
+          navigator.mediaDevices.enumerateDevices()
+          .then(function(devices) {
+            var videoSelect = document.getElementById('videoSource');
+            for (const deviceInfo of devices) {
+              const option = document.createElement('option');
+              option.value = deviceInfo.deviceId;
+              if (deviceInfo.kind === 'videoinput') {
+                option.text = deviceInfo.label || `Camera ${videoSelect.length + 1}`;
+                videoSelect.appendChild(option);
+              }
+            }
+          })
+        })
+
         document.getElementById("publishBtn").addEventListener("click", function () {
           if (publisher) {
               document.getElementById("publishBtn").value = "Publish";
@@ -100,6 +121,7 @@
             height: document.getElementById("resolution").value.split('x')[1],
             videoRequired: document.getElementById("videoRequired").checked,
             audioRequired: document.getElementById("audioRequired").checked,
+            videoSelect: document.getElementById('videoSource'),
 
             onPublisherCreated: function(settings){ logItem('Ready to WebRTC publishing'); },
             onConnectionStateChange: function(connectionState){ logItem('Connection state change', connectionState); },
@@ -111,7 +133,7 @@
 
           document.getElementById("resolution").disabled = true;
           document.getElementById("bandwidth").disabled = true;
-          
+
           publisher = new WebRTCjs(config);
           publisher.publish();
 
