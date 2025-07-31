@@ -83,3 +83,4 @@ var config = {
 - Video: [WebRTC ingest setup in Nimble Streamer](https://www.youtube.com/watch?v=o7DnQuLLerM)
 - [Opus audio support in SLDP](https://blog.wmspanel.com/2022/07/opus-sldp.html)
 - [Play audio-only SLDP with Opus on iPhone](https://blog.wmspanel.com/2022/09/audio-sldp-opus-webrtc-iphone.html)
+- [NDI to WHEP: converting local video feeds for WebRTC delivery](https://softvelum.com/2025/07/ndi-whep-webrtc-workflow/)
